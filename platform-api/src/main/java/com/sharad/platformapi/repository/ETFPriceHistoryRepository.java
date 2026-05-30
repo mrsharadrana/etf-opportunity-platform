@@ -1,7 +1,6 @@
 package com.sharad.platformapi.repository;
 
 import com.sharad.platformapi.entity.ETFPriceHistory;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -39,6 +38,11 @@ public interface ETFPriceHistoryRepository
 
     ETFPriceHistory
     findBySymbolAndTradeDate(
+            String symbol,
+            LocalDate tradeDate
+    );
+
+    boolean existsBySymbolAndTradeDate(
             String symbol,
             LocalDate tradeDate
     );

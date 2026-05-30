@@ -46,6 +46,73 @@ public class AnalyticsEngineService {
                 ETFPriceHistory current =
                         history.get(i);
 
+                // =====================
+                // SMA 20
+                // =====================
+
+                if (i >= 19) {
+
+                    List<BigDecimal> prices =
+                            history.subList(i - 19, i + 1)
+                                    .stream()
+                                    .map(
+                                            ETFPriceHistory::getClosePrice
+                                    )
+                                    .toList();
+
+                    current.setSma20(
+                            indicatorService.calculateSMA(
+                                    prices
+                            )
+                    );
+                }
+
+                // =====================
+                // SMA 50
+                // =====================
+
+                if (i >= 49) {
+
+                    List<BigDecimal> prices =
+                            history.subList(i - 49, i + 1)
+                                    .stream()
+                                    .map(
+                                            ETFPriceHistory::getClosePrice
+                                    )
+                                    .toList();
+
+                    current.setSma50(
+                            indicatorService.calculateSMA(
+                                    prices
+                            )
+                    );
+                }
+
+                // =====================
+                // SMA 200
+                // =====================
+
+                if (i >= 199) {
+
+                    List<BigDecimal> prices =
+                            history.subList(i - 199, i + 1)
+                                    .stream()
+                                    .map(
+                                            ETFPriceHistory::getClosePrice
+                                    )
+                                    .toList();
+
+                    current.setSma200(
+                            indicatorService.calculateSMA(
+                                    prices
+                            )
+                    );
+                }
+
+                // =====================
+                // Returns
+                // =====================
+
                 if (i >= 21) {
 
                     BigDecimal returns1m =
@@ -88,6 +155,10 @@ public class AnalyticsEngineService {
                     );
                 }
 
+                // =====================
+                // Momentum Score
+                // =====================
+
                 BigDecimal momentumScore =
                         indicatorService.calculateMomentumScore(
 
@@ -114,7 +185,9 @@ public class AnalyticsEngineService {
                         )
                 );
 
-                repository.save(current);
+                repository.save(
+                        current
+                );
             }
         }
 
@@ -136,9 +209,13 @@ public class AnalyticsEngineService {
 
         for (ETFPriceHistory etf : rankings) {
 
-            etf.setRank(rank++);
+            etf.setRank(
+                    rank++
+            );
 
-            repository.save(etf);
+            repository.save(
+                    etf
+            );
         }
     }
 }

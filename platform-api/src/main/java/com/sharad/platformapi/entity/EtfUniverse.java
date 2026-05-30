@@ -24,6 +24,8 @@ public class EtfUniverse {
     @Column(nullable = false)
     private Boolean enabled = true;
 
+    private String region;
+
     public EtfUniverse() {
     }
 
@@ -69,5 +71,13 @@ public class EtfUniverse {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getRegion() {
+    return region;
+}
+
+    public void setRegion(String region) {
+        this.region = region;
     }
 }
