@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public record RecommendationRequestDto(
+public record ActionPlanRequestDto(
 
         @NotNull
         @DecimalMin("0.01")
