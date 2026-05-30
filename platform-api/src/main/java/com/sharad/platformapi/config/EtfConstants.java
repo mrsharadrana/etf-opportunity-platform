@@ -7,5 +7,6 @@ public final class EtfConstants {
 
     public static final String DEFAULT_DEFENSIVE_ETF =
             "GOLDBEES.NS";
+            
 
 }

@@ -56,4 +56,13 @@ public interface ETFPriceHistoryRepository
     findTop30BySymbolOrderByTradeDateDesc(
             String symbol
     );
+
+    List<ETFPriceHistory>
+    findByTradeDateAndSymbolIn(
+            java.time.LocalDate tradeDate,
+            java.util.List<String> symbols
+    );
+
+    @org.springframework.data.jpa.repository.Query("SELECT MAX(e.tradeDate) FROM ETFPriceHistory e")
+    java.time.LocalDate findMaxTradeDate();
 }

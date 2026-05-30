@@ -1,5 +1,6 @@
 package com.sharad.platformapi.controller;
 
+import com.sharad.platformapi.service.IndiaVixIngestionService;
 import com.sharad.platformapi.service.ingestion.HistoricalDataLoaderService;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,11 +9,14 @@ import org.springframework.web.bind.annotation.*;
 public class AdminDataController {
 
     private final HistoricalDataLoaderService loaderService;
+    private final IndiaVixIngestionService indiaVixIngestionService;
 
     public AdminDataController(
-            HistoricalDataLoaderService loaderService
+            HistoricalDataLoaderService loaderService,
+            IndiaVixIngestionService indiaVixIngestionService
     ) {
         this.loaderService = loaderService;
+        this.indiaVixIngestionService = indiaVixIngestionService;
     }
 
     @PostMapping("/backfill")
@@ -31,5 +35,13 @@ public class AdminDataController {
         loaderService.loadSymbol(symbol);
 
         return "Backfill started for " + symbol;
+    }
+
+    @PostMapping("/ingest/india-vix")
+    public String ingestIndiaVix() {
+
+        indiaVixIngestionService.ingestLatestIndiaVix();
+
+        return "India VIX ingestion started";
     }
 }

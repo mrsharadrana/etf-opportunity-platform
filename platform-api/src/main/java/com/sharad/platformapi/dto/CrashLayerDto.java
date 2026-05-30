@@ -1,14 +1,11 @@
 package com.sharad.platformapi.dto;
 
 public record CrashLayerDto(
-
         int fearScore,
-
-        String marketState,
-
-        int crashLayer,
-
-        int deployPercent
-
+        String fearState,
+        String crashLayer,
+        int deployPercent,
+        String explanation,
+        int remainingLayers
 ) {
 }

@@ -1,66 +1,88 @@
 package com.sharad.platformapi.service;
 
+import com.sharad.platformapi.domain.CrashLayer;
 import com.sharad.platformapi.dto.CrashLayerDto;
-import com.sharad.platformapi.dto.FearGreedDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CrashLayerService {
 
-    private final FearGreedService fearGreedService;
+    private static final Logger log = LoggerFactory.getLogger(CrashLayerService.class);
 
-    public CrashLayerService(
-            FearGreedService fearGreedService
-    ) {
-        this.fearGreedService = fearGreedService;
+    private final FearGreedServiceV2 fearGreedServiceV2;
+
+    public CrashLayerService(FearGreedServiceV2 fearGreedServiceV2) {
+        this.fearGreedServiceV2 = fearGreedServiceV2;
     }
 
-    public CrashLayerDto calculate() {
+    public CrashLayerDto getCurrentCrashLayer() {
+        final FearGreedServiceV2.FearGreedV2Dto fearDto;
 
-        FearGreedDto fear =
-                fearGreedService.calculate();
-
-        int layer;
-        int deployPercent;
-
-        int score = fear.fearScore();
-
-        if (score < 20) {
-
-            layer = 0;
-            deployPercent = 0;
-
-        } else if (score < 40) {
-
-            layer = 1;
-            deployPercent = 10;
-
-        } else if (score < 55) {
-
-            layer = 2;
-            deployPercent = 20;
-
-        } else if (score < 70) {
-
-            layer = 3;
-            deployPercent = 20;
-
-        } else if (score < 85) {
-
-            layer = 4;
-            deployPercent = 20;
-
-        } else {
-
-            layer = 5;
-            deployPercent = 30;
+        try {
+            fearDto = fearGreedServiceV2.calculate();
+        } catch (Exception e) {
+            log.error("FearGreedServiceV2.calculate() failed", e);
+            throw new IllegalStateException("FearGreedServiceV2 unavailable", e);
         }
 
+        if (fearDto == null) {
+            log.error("FearGreedServiceV2 returned null");
+            throw new IllegalStateException("FearGreedServiceV2 returned null");
+        }
+
+        int score = fearDto.fearScore();
+        String state = fearDto.fearState();
+
+        // Validate score range
+        if (score < 0 || score > 100) {
+            log.error("Invalid fearScore from FearGreedServiceV2: {}", score);
+            throw new IllegalStateException("Invalid fearScore from FearGreedServiceV2: " + score);
+        }
+
+        CrashLayer layer = mapScoreToLayer(score);
+
+        int remainingLayers = calculateRemainingLayers(layer);
+
+        log.debug("Mapped fearScore={} fearState={} -> {} ({}%) with {} remaining layers",
+                score, state, layer.name(), layer.getDeployPercent(), remainingLayers);
+
         return new CrashLayerDto(
-                fear.fearScore(),
-                fear.state(),
-                layer,
-                deployPercent
+                score,
+                state,
+                layer.name(),
+                layer.getDeployPercent(),
+                layer.getExplanation(),
+                remainingLayers
         );
+    }
+
+    private CrashLayer mapScoreToLayer(int score) {
+        if (score <= 20) {
+            return CrashLayer.NO_DEPLOYMENT;
+        }
+
+        if (score <= 40) {
+            return CrashLayer.LAYER_1;
+        }
+
+        if (score <= 55) {
+            return CrashLayer.LAYER_2;
+        }
+
+        if (score <= 70) {
+            return CrashLayer.LAYER_3;
+        }
+
+        if (score <= 85) {
+            return CrashLayer.LAYER_4;
+        }
+
+        return CrashLayer.LAYER_5;
+    }
+
+    private int calculateRemainingLayers(CrashLayer layer) {
+        return (CrashLayer.values().length - 1) - layer.ordinal();
     }
 }
