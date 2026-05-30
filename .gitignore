@@ -1,0 +1,30 @@
+# Python
+venv/
+.venv/
+__pycache__/
+
+# Java / Gradle
+.gradle/
+build/
+*.class
+
+# Node
+node_modules/
+.next/
+out/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Mac
+.DS_Store
+
+# Env
+.env
+.env.local
+
+# Logs
+logs/
+*.log

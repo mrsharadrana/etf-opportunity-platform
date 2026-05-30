@@ -1,0 +1,22 @@
+spring:
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/analytics_engine
+    username: postgres
+    password: postgres
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+    show-sql: true
+
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8080
