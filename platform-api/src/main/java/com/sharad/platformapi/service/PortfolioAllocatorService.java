@@ -18,6 +18,9 @@ public class PortfolioAllocatorService {
     private static final BigDecimal DEFAULT_CAPITAL =
             BigDecimal.valueOf(100000);
 
+    private static final int MAX_POSITION_SIZE =
+            35;
+
     private final EtfUniverseService etfUniverseService;
 
     private final EtfScoreService etfScoreService;
@@ -101,6 +104,12 @@ public class PortfolioAllocatorService {
                     (int) Math.round(
                             (score.totalScore() * 100.0)
                                     / totalScore
+                    );
+
+            allocationPct =
+                    Math.min(
+                            allocationPct,
+                            MAX_POSITION_SIZE
                     );
 
             BigDecimal allocationAmount =
