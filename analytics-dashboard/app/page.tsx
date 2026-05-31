@@ -7,6 +7,7 @@ import StatusBadge from "@/components/StatusBadge";
 import KpiCard from "@/components/KpiCard";
 import RegimeTimeline from "@/components/RegimeTimeline";
 import PerformanceChart from "@/components/PerformanceChart";
+import SystemStatusBanner from "@/components/SystemStatusBanner";
 
 export default function Home() {
 
@@ -51,10 +52,12 @@ export default function Home() {
     >
 
       <h1
-        className="text-5xl font-bold mb-10"
+        className="text-5xl font-bold mb-6"
       >
         ETF Selector Platform
       </h1>
+
+      <SystemStatusBanner />
 
       {/* TOP SECTION */}
 
@@ -277,12 +280,14 @@ export default function Home() {
                   </td>
 
                   <td>
+
                     <Link
-                        href={`/etf/${etf.symbol}`}
-                        className="text-cyan-400 hover:text-cyan-300"
-                        >
-                        {etf.symbol}
-                        </Link>
+                      href={`/etf/${etf.symbol}`}
+                      className="text-cyan-400 hover:text-cyan-300"
+                    >
+                      {etf.symbol}
+                    </Link>
+
                   </td>
 
                   <td>
@@ -373,9 +378,7 @@ export default function Home() {
                   <td
                     className="py-2"
                   >
-                    {
-                      row.tradeDate
-                    }
+                    {row.tradeDate}
                   </td>
 
                   <td>
@@ -389,9 +392,7 @@ export default function Home() {
                   </td>
 
                   <td>
-                    {
-                      row.recommendedETF
-                    }
+                    {row.recommendedETF}
                   </td>
 
                 </tr>

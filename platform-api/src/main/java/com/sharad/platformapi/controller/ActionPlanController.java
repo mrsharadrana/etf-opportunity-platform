@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/api/action-plan")
 public class ActionPlanController {
@@ -18,6 +20,16 @@ public class ActionPlanController {
             ActionPlanService service
     ) {
         this.service = service;
+    }
+
+    @GetMapping
+    public ActionPlanDto currentPlan() {
+
+        return service.generate(
+                BigDecimal.valueOf(
+                        100000
+                )
+        );
     }
 
     @PostMapping

@@ -3,6 +3,9 @@
 import { use } from "react";
 import { useEffect, useState } from "react";
 
+import SignalStrength
+  from "@/components/SignalStrength";
+
 export default function EtfPage(
   {
     params
@@ -70,65 +73,200 @@ export default function EtfPage(
   ) {
 
     return (
-      <main className="p-10 bg-slate-950 text-white min-h-screen">
+
+      <main
+        className="
+          p-10
+          bg-slate-950
+          text-white
+          min-h-screen
+        "
+      >
+
         Loading ETF...
+
       </main>
     );
   }
 
+  let action =
+    "Monitor";
+
+  if (
+    probability.rating ===
+    "BUY"
+  ) {
+
+    action =
+      "🚀 Buy Now";
+  }
+
+  if (
+    probability.rating ===
+    "HOLD"
+  ) {
+
+    action =
+      "🟡 Hold";
+  }
+
+  if (
+    probability.rating ===
+    "AVOID"
+  ) {
+
+    action =
+      "🔴 Avoid";
+  }
+
   return (
 
-    <main className="p-10 bg-slate-950 text-white min-h-screen">
+    <main
+      className="
+        p-10
+        bg-slate-950
+        text-white
+        min-h-screen
+      "
+    >
 
-      <h1 className="text-5xl font-bold mb-8">
+      <h1
+        className="
+          text-5xl
+          font-bold
+          mb-2
+        "
+      >
         {symbol}
       </h1>
 
-      <div className="grid md:grid-cols-4 gap-4 mb-8">
+      <p
+        className="
+          text-2xl
+          font-semibold
+          text-cyan-400
+          mb-8
+        "
+      >
+        {action}
+      </p>
 
-        <div className="bg-slate-900 p-6 rounded-xl">
+      {/* DECISION SUMMARY */}
 
-          <p className="text-gray-400">
+      <div
+        className="
+          grid
+          md:grid-cols-4
+          gap-4
+          mb-8
+        "
+      >
+
+        <div
+          className="
+            bg-slate-900
+            p-6
+            rounded-xl
+          "
+        >
+
+          <p
+            className="
+              text-gray-400
+            "
+          >
             Confidence
           </p>
 
-          <p className="text-3xl font-bold">
+          <p
+            className="
+              text-3xl
+              font-bold
+            "
+          >
             {probability.confidence}%
           </p>
 
         </div>
 
-        <div className="bg-slate-900 p-6 rounded-xl">
+        <div
+          className="
+            bg-slate-900
+            p-6
+            rounded-xl
+          "
+        >
 
-          <p className="text-gray-400">
+          <p
+            className="
+              text-gray-400
+            "
+          >
             Rating
           </p>
 
-          <p className="text-3xl font-bold">
+          <p
+            className="
+              text-3xl
+              font-bold
+            "
+          >
             {probability.rating}
           </p>
 
         </div>
 
-        <div className="bg-slate-900 p-6 rounded-xl">
+        <div
+          className="
+            bg-slate-900
+            p-6
+            rounded-xl
+          "
+        >
 
-          <p className="text-gray-400">
+          <p
+            className="
+              text-gray-400
+            "
+          >
             Bullish Signals
           </p>
 
-          <p className="text-3xl font-bold">
+          <p
+            className="
+              text-3xl
+              font-bold
+              text-green-400
+            "
+          >
             {probability.bullishSignals}
           </p>
 
         </div>
 
-        <div className="bg-slate-900 p-6 rounded-xl">
+        <div
+          className="
+            bg-slate-900
+            p-6
+            rounded-xl
+          "
+        >
 
-          <p className="text-gray-400">
+          <p
+            className="
+              text-gray-400
+            "
+          >
             Bearish Signals
           </p>
 
-          <p className="text-3xl font-bold">
+          <p
+            className="
+              text-3xl
+              font-bold
+              text-red-400
+            "
+          >
             {probability.bearishSignals}
           </p>
 
@@ -136,45 +274,150 @@ export default function EtfPage(
 
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      {/* SIGNAL STRENGTH */}
 
-        <div className="bg-slate-900 p-6 rounded-xl">
+      <div
+        className="
+          bg-slate-900
+          p-6
+          rounded-xl
+          mb-8
+        "
+      >
 
-          <h2 className="text-2xl font-bold mb-4">
+        <SignalStrength
+          value={
+            probability.confidence
+          }
+        />
+
+      </div>
+
+      {/* WHY THIS ETF */}
+
+      <div
+        className="
+          bg-slate-900
+          p-6
+          rounded-xl
+          mb-8
+        "
+      >
+
+        <h2
+          className="
+            text-2xl
+            font-bold
+            mb-4
+          "
+        >
+          Why This ETF?
+        </h2>
+
+        <div
+          className="
+            space-y-2
+          "
+        >
+
+          <p>
+            ✅ Trend:
+            {" "}
+            {scorecard.trendStrength}
+          </p>
+
+          <p>
+            ✅ Momentum:
+            {" "}
+            {scorecard.momentumScore.toFixed(2)}
+          </p>
+
+          <p>
+            ✅ Strongest Signal:
+            {" "}
+            {edge.strongestSignal}
+          </p>
+
+          <p>
+            ✅ Above 200 DMA:
+            {" "}
+            {scorecard.above200DMA
+              ? "Yes"
+              : "No"}
+          </p>
+
+        </div>
+
+      </div>
+
+      <div
+        className="
+          grid
+          md:grid-cols-2
+          gap-6
+        "
+      >
+
+        {/* TECHNICALS */}
+
+        <div
+          className="
+            bg-slate-900
+            p-6
+            rounded-xl
+          "
+        >
+
+          <h2
+            className="
+              text-2xl
+              font-bold
+              mb-4
+            "
+          >
             Technical Scorecard
           </h2>
 
-          <div className="space-y-2">
+          <div
+            className="
+              space-y-2
+            "
+          >
 
             <p>
-              RSI: {scorecard.rsi.toFixed(2)}
+              Current Price:
+              {" "}
+              ₹
+              {scorecard.price.toFixed(2)}
             </p>
 
             <p>
-              MACD Histogram:{" "}
+              RSI:
+              {" "}
+              {scorecard.rsi.toFixed(2)}
+            </p>
+
+            <p>
+              SMA50:
+              {" "}
+              {scorecard.sma50.toFixed(2)}
+            </p>
+
+            <p>
+              SMA200:
+              {" "}
+              {scorecard.sma200.toFixed(2)}
+            </p>
+
+            <p>
+              MACD Histogram:
+              {" "}
               {scorecard.macdHistogram.toFixed(2)}
             </p>
 
             <p>
-              SMA50: {scorecard.sma50.toFixed(2)}
-            </p>
-
-            <p>
-              SMA200: {scorecard.sma200.toFixed(2)}
-            </p>
-
-            <p>
-              Momentum:{" "}
-              {scorecard.momentumScore.toFixed(2)}
-            </p>
-
-            <p>
-              Trend Strength:{" "}
-              {scorecard.trendStrength}
-            </p>
-
-            <p>
-              Signal:{" "}
+              Signal:
+              {" "}
               {scorecard.signal}
             </p>
 
@@ -182,45 +425,54 @@ export default function EtfPage(
 
         </div>
 
-        <div className="bg-slate-900 p-6 rounded-xl">
+        {/* EDGE ANALYSIS */}
 
-          <h2 className="text-2xl font-bold mb-4">
-            Edge Analysis
+        <div
+          className="
+            bg-slate-900
+            p-6
+            rounded-xl
+          "
+        >
+
+          <h2
+            className="
+              text-2xl
+              font-bold
+              mb-4
+            "
+          >
+            Historical Edge
           </h2>
 
-          <div className="space-y-2">
+          <div
+            className="
+              space-y-2
+            "
+          >
 
             <p>
-              Trend Edge:{" "}
-              {edge.trendWinRate.toFixed(2)}%
+              Trend Win Rate:
               {" "}
-              ({edge.trendSampleSize} samples)
+              {edge.trendWinRate.toFixed(1)}%
             </p>
 
             <p>
-              MACD Edge:{" "}
-              {edge.macdWinRate.toFixed(2)}%
+              MACD Win Rate:
               {" "}
-              ({edge.macdSampleSize} samples)
+              {edge.macdWinRate.toFixed(1)}%
             </p>
 
             <p>
-              RSI Edge:{" "}
-              {edge.rsiWinRate.toFixed(2)}%
+              RSI Win Rate:
               {" "}
-              ({edge.rsiSampleSize} samples)
+              {edge.rsiWinRate.toFixed(1)}%
             </p>
 
             <p>
-              Momentum Edge:{" "}
-              {edge.momentumWinRate.toFixed(2)}%
+              Momentum Win Rate:
               {" "}
-              ({edge.momentumSampleSize} samples)
-            </p>
-
-            <p>
-              Strongest Signal:{" "}
-              {edge.strongestSignal}
+              {edge.momentumWinRate.toFixed(1)}%
             </p>
 
           </div>

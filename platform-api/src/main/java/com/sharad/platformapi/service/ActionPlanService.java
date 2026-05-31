@@ -9,6 +9,7 @@ import com.sharad.platformapi.dto.PortfolioResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,12 +47,15 @@ public class ActionPlanService {
 
         BigDecimal deployAmount =
                 opportunityBuffer.multiply(
-                        BigDecimal.valueOf(
-                                crashLayer.deployPercent()
+                                BigDecimal.valueOf(
+                                        crashLayer.deployPercent()
+                                )
                         )
-                ).divide(
-                        BigDecimal.valueOf(100)
-                );
+                        .divide(
+                                BigDecimal.valueOf(100),
+                                2,
+                                RoundingMode.HALF_UP
+                        );
 
         PortfolioResponseDto portfolio =
                 portfolioAllocatorService.allocate();
@@ -96,12 +100,22 @@ public class ActionPlanService {
 
                     if (allocation != null) {
 
+                        BigDecimal suggestedAmount =
+                                deployAmount.multiply(
+                                                BigDecimal.valueOf(
+                                                        allocation.allocationPct()
+                                                )
+                                        )
+                                        .divide(
+                                                BigDecimal.valueOf(100),
+                                                0,
+                                                RoundingMode.HALF_UP
+                                        );
+
                         buy.add(
                                 action.symbol()
                                         + " ₹"
-                                        + allocation
-                                        .allocationAmount()
-                                        .intValue()
+                                        + suggestedAmount.intValue()
                         );
 
                     } else {

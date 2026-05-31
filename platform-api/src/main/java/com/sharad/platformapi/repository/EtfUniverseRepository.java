@@ -3,7 +3,9 @@ package com.sharad.platformapi.repository;
 import com.sharad.platformapi.entity.EtfUniverse;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
 import java.util.List;
+
 
 public interface EtfUniverseRepository
         extends JpaRepository<EtfUniverse, Long> {
@@ -17,4 +19,8 @@ public interface EtfUniverseRepository
     List<EtfUniverse> findByCategoryAndEnabledTrue(
             String category
     );
+
+    Optional<EtfUniverse> findBySymbolAndEnabledTrue(
+        String symbol
+);
 }

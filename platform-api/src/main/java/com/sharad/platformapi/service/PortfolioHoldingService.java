@@ -5,7 +5,9 @@ import com.sharad.platformapi.dto.CreateHoldingRequest;
 import com.sharad.platformapi.dto.HoldingResponseDto;
 import com.sharad.platformapi.entity.ETFPriceHistory;
 import com.sharad.platformapi.entity.PortfolioHolding;
+import com.sharad.platformapi.exception.InvalidEtfSymbolException;
 import com.sharad.platformapi.repository.ETFPriceHistoryRepository;
+import com.sharad.platformapi.repository.EtfUniverseRepository;
 import com.sharad.platformapi.repository.PortfolioHoldingRepository;
 
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,65 +26,79 @@ public class PortfolioHoldingService {
 
     private final ETFPriceHistoryRepository priceRepository;
 
+    private final EtfUniverseRepository etfUniverseRepository;
+
     public PortfolioHoldingService(
             PortfolioHoldingRepository repository,
-            ETFPriceHistoryRepository priceRepository
+            ETFPriceHistoryRepository priceRepository,
+            EtfUniverseRepository etfUniverseRepository
     ) {
         this.repository = repository;
         this.priceRepository = priceRepository;
+        this.etfUniverseRepository = etfUniverseRepository;
     }
 
-public HoldingResponseDto create(
-        CreateHoldingRequest request
-) {
+    public HoldingResponseDto create(
+            CreateHoldingRequest request
+    ) {
 
-    PortfolioHolding holding =
-            new PortfolioHolding();
+        etfUniverseRepository
+                .findBySymbolAndEnabledTrue(
+                        request.symbol()
+                )
+                .orElseThrow(
+                        () -> new InvalidEtfSymbolException(
+                                request.symbol()
+                        )
+                );
 
-    holding.setSymbol(
-            request.symbol()
-    );
+        PortfolioHolding holding =
+                new PortfolioHolding();
 
-    holding.setQuantity(
-            request.quantity()
-    );
+        holding.setSymbol(
+                request.symbol()
+        );
 
-    holding.setEntryPrice(
-            request.entryPrice()
-    );
+        holding.setQuantity(
+                request.quantity()
+        );
 
-    holding.setEntryDate(
-            LocalDate.now()
-    );
+        holding.setEntryPrice(
+                request.entryPrice()
+        );
 
-    holding.setHighestPriceSinceEntry(
-            request.entryPrice()
-    );
+        holding.setEntryDate(
+                LocalDate.now()
+        );
 
-    holding.setTrailingStopLoss(
-            request.entryPrice()
-                    .multiply(
-                            BigDecimal.valueOf(0.92)
-                    )
-                    .setScale(
-                            2,
-                            RoundingMode.HALF_UP
-                    )
-    );
+        holding.setHighestPriceSinceEntry(
+                request.entryPrice()
+        );
 
-    holding.setCurrentState(
-            PositionState.HOLDING
-    );
+        holding.setTrailingStopLoss(
+                request.entryPrice()
+                        .multiply(
+                                BigDecimal.valueOf(0.92)
+                        )
+                        .setScale(
+                                2,
+                                RoundingMode.HALF_UP
+                        )
+        );
 
-    PortfolioHolding saved =
-            repository.save(
-                    holding
-            );
+        holding.setCurrentState(
+                PositionState.HOLDING
+        );
 
-    return toDto(
-            saved
-    );
-}
+        PortfolioHolding saved =
+                repository.save(
+                        holding
+                );
+
+        return toDto(
+                saved
+        );
+    }
 
     public List<HoldingResponseDto> getAll() {
 

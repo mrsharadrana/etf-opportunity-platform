@@ -1,0 +1,218 @@
+===== JAVA =====
+src/main/java
+└── com
+    └── sharad
+        └── platformapi
+            ├── PlatformApiApplication.java
+            ├── config
+            │   ├── BenchmarkConstants.java
+            │   ├── EtfConstants.java
+            │   └── WebConfig.java
+            ├── controller
+            │   ├── ActionPlanController.java
+            │   ├── AdminController.java
+            │   ├── AdminDataController.java
+            │   ├── AdminRecalculationController.java
+            │   ├── AllocationController.java
+            │   ├── BacktestController.java
+            │   ├── BenchmarkController.java
+            │   ├── CrashLayerController.java
+            │   ├── DashboardController.java
+            │   ├── DeploymentController.java
+            │   ├── ETFController.java
+            │   ├── EdgeAnalysisController.java
+            │   ├── EdgeSummaryController.java
+            │   ├── EmaController.java
+            │   ├── EtfScoreController.java
+            │   ├── EtfUniverseAdminController.java
+            │   ├── EtfUniverseController.java
+            │   ├── FearGreedController.java
+            │   ├── HealthController.java
+            │   ├── LifecycleController.java
+            │   ├── MacdController.java
+            │   ├── MarketRegimeController.java
+            │   ├── MarketStateController.java
+            │   ├── OpportunityController.java
+            │   ├── PortfolioBacktestController.java
+            │   ├── PortfolioController.java
+            │   ├── PortfolioHoldingController.java
+            │   ├── ProbabilityController.java
+            │   ├── RankingController.java
+            │   ├── RecommendationController.java
+            │   ├── RelativeStrengthController.java
+            │   ├── RotationController.java
+            │   ├── RotationModelController.java
+            │   ├── RsiController.java
+            │   ├── ScoreHistoryController.java
+            │   ├── ScorePersistenceController.java
+            │   ├── ScorecardController.java
+            │   ├── ScreenerController.java
+            │   ├── SelectorController.java
+            │   ├── SelectorHistoryController.java
+            │   ├── SelectorPerformanceController.java
+            │   ├── SignalAnalyticsController.java
+            │   ├── SignalHistoryController.java
+            │   ├── SignalStrengthController.java
+            │   ├── SmaController.java
+            │   └── TradeCardController.java
+            ├── domain
+            │   ├── CrashLayer.java
+            │   ├── PositionState.java
+            │   ├── RecommendationAction.java
+            │   └── SignalStrength.java
+            ├── dto
+            │   ├── ActionPlanDto.java
+            │   ├── ActionPlanRequestDto.java
+            │   ├── AllocationRecommendationDto.java
+            │   ├── AllocationRequestDto.java
+            │   ├── BacktestResultDto.java
+            │   ├── BenchmarkComparisonDto.java
+            │   ├── CrashLayerDto.java
+            │   ├── CreateHoldingRequest.java
+            │   ├── DashboardDto.java
+            │   ├── DashboardResponse.java
+            │   ├── DashboardResponseDto.java
+            │   ├── DeploymentRecommendationDto.java
+            │   ├── DeploymentRequestDto.java
+            │   ├── EdgeAnalysisDto.java
+            │   ├── EdgeSummaryDto.java
+            │   ├── EmaResponseDto.java
+            │   ├── EtfAllocationDto.java
+            │   ├── EtfScoreDto.java
+            │   ├── EtfScorecardDto.java
+            │   ├── EtfUniverseDto.java
+            │   ├── FearGreedDto.java
+            │   ├── FearGreedV2Dto.java
+            │   ├── HistoricalPriceDto.java
+            │   ├── HistoryGenerationResultDto.java
+            │   ├── HoldingResponseDto.java
+            │   ├── LifecycleActionDto.java
+            │   ├── MacdResponseDto.java
+            │   ├── MarketIndicatorDto.java
+            │   ├── MarketRegimeDto.java
+            │   ├── MarketRegimeResponse.java
+            │   ├── MarketStateDto.java
+            │   ├── OpportunityResponseDto.java
+            │   ├── PortfolioAllocationDto.java
+            │   ├── PortfolioBacktestDto.java
+            │   ├── PortfolioHoldingDto.java
+            │   ├── PortfolioResponseDto.java
+            │   ├── ProbabilityResponseDto.java
+            │   ├── RankingDto.java
+            │   ├── RankingResponse.java
+            │   ├── RecommendationDto.java
+            │   ├── RecommendationRequestDto.java
+            │   ├── RelativeStrengthDto.java
+            │   ├── RotationDto.java
+            │   ├── RotationModelDto.java
+            │   ├── RsiResponseDto.java
+            │   ├── ScoreHistoryDto.java
+            │   ├── ScreenerResponseDto.java
+            │   ├── ScreenerRowDto.java
+            │   ├── SelectorHistoryDto.java
+            │   ├── SelectorPerformanceDto.java
+            │   ├── SelectorRankingDto.java
+            │   ├── SelectorResponseDto.java
+            │   ├── SignalAnalyticsDto.java
+            │   ├── SignalHistoryDto.java
+            │   ├── SignalStrengthDto.java
+            │   ├── SignalValidationDto.java
+            │   ├── SmaResponseDto.java
+            │   └── TradeCardDto.java
+            ├── entity
+            │   ├── ETFPriceHistory.java
+            │   ├── EtfUniverse.java
+            │   ├── MarketIndicatorHistory.java
+            │   ├── MarketRegime.java
+            │   └── PortfolioHolding.java
+            ├── repository
+            │   ├── ETFPriceHistoryRepository.java
+            │   ├── EtfUniverseRepository.java
+            │   ├── MarketIndicatorHistoryRepository.java
+            │   ├── MarketRegimeRepository.java
+            │   └── PortfolioHoldingRepository.java
+            ├── scheduler
+            │   └── AnalyticsScheduler.java
+            └── service
+                ├── ActionPlanService.java
+                ├── AdminRecalculationService.java
+                ├── AllocationService.java
+                ├── BacktestService.java
+                ├── BenchmarkService.java
+                ├── CrashLayerService.java
+                ├── DashboardService.java
+                ├── DeploymentService.java
+                ├── DistanceFrom200DmaFearFactorProvider.java
+                ├── DrawdownFearFactorProvider.java
+                ├── ETFHistoryService.java
+                ├── EdgeAnalysisService.java
+                ├── EdgeSummaryService.java
+                ├── EtfScoreService.java
+                ├── EtfUniverseService.java
+                ├── FearFactorProvider.java
+                ├── FearGreedService.java
+                ├── FearGreedServiceV2.java
+                ├── HistoricalMarketRegimeService.java
+                ├── IndiaVixFearFactorProvider.java
+                ├── IndiaVixIngestionService.java
+                ├── LifecycleService.java
+                ├── MarketBreadthFearFactorProvider.java
+                ├── MarketIndicatorService.java
+                ├── MarketStateService.java
+                ├── OpportunityEngineService.java
+                ├── PortfolioAllocatorService.java
+                ├── PortfolioBacktestService.java
+                ├── PortfolioHoldingService.java
+                ├── ProbabilityEngineService.java
+                ├── RecommendationService.java
+                ├── RelativeStrengthService.java
+                ├── RotationModelService.java
+                ├── RotationService.java
+                ├── ScoreHistoryService.java
+                ├── ScorePersistenceService.java
+                ├── ScorecardService.java
+                ├── ScreenerService.java
+                ├── SelectorHistoryService.java
+                ├── SelectorPerformanceService.java
+                ├── SelectorService.java
+                ├── SignalAnalyticsService.java
+                ├── SignalHistoryService.java
+                ├── SignalStrengthService.java
+                ├── SignalValidationService.java
+                ├── TradeCardService.java
+                ├── analytics
+                │   └── AnalyticsEngineService.java
+                ├── indicators
+                │   ├── IndicatorService.java
+                │   └── ta4j
+                ├── ingestion
+                │   ├── DummyMarketDataProvider.java
+                │   ├── HistoricalDataLoaderService.java
+                │   ├── IndiaVixMarketDataProvider.java
+                │   ├── MarketDataIngestionService.java
+                │   ├── MarketDataProvider.java
+                │   └── YahooFinanceClient.java
+                ├── ranking
+                │   └── RankingService.java
+                └── regime
+                    └── MarketRegimeService.java
+
+18 directories, 179 files
+
+===== RESOURCES =====
+src/main/resources
+├── application.properties
+├── application.yml
+├── db
+│   └── migration
+│       ├── V1__initial_schema.sql
+│       ├── V2__create_etf_universe.sql
+│       ├── V3__seed_etf_universe.sql
+│       ├── V4__add_etf_score_columns.sql
+│       ├── V5__add_region_to_etf_universe.sql
+│       ├── V6__create_market_indicator_history.sql
+│       └── V7__create_portfolio_holdings.sql
+├── static
+└── templates
+
+5 directories, 9 files

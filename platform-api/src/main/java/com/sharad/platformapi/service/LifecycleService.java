@@ -7,6 +7,7 @@ import com.sharad.platformapi.entity.ETFPriceHistory;
 import com.sharad.platformapi.entity.PortfolioHolding;
 import com.sharad.platformapi.repository.ETFPriceHistoryRepository;
 import com.sharad.platformapi.repository.PortfolioHoldingRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,8 @@ public class LifecycleService {
                 priceRepository;
     }
 
-    public List<LifecycleActionDto> generate() {
+    @Transactional
+public List<LifecycleActionDto> generate() {
 
         List<LifecycleActionDto> actions =
                 new ArrayList<>();

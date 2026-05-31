@@ -47,7 +47,12 @@ export default function PortfolioPage() {
     return (
 
       <main
-        className="bg-slate-950 min-h-screen text-white p-8"
+        className="
+          bg-slate-950
+          min-h-screen
+          text-white
+          p-8
+        "
       >
 
         Loading Portfolio...
@@ -57,106 +62,287 @@ export default function PortfolioPage() {
     );
   }
 
+  const deploymentPct =
+    Math.round(
+      (
+        data.investedCapital /
+        data.capital
+      ) * 100
+    );
+
+  const largestPosition =
+    [...data.allocations]
+      .sort(
+        (a, b) =>
+          b.allocationPct -
+          a.allocationPct
+      )[0];
+
+  let marketOutlook =
+    "⚪ Neutral";
+
+  if (
+    data.marketRegime ===
+    "RISK_ON"
+  ) {
+
+    marketOutlook =
+      "🟢 Favor Investing";
+  }
+
+  if (
+    data.marketRegime ===
+    "RECOVERY"
+  ) {
+
+    marketOutlook =
+      "🟡 Accumulate Slowly";
+  }
+
+  if (
+    data.marketRegime ===
+    "RISK_OFF"
+  ) {
+
+    marketOutlook =
+      "🟠 Be Selective";
+  }
+
+  if (
+    data.marketRegime ===
+    "PANIC"
+  ) {
+
+    marketOutlook =
+      "🔴 Deploy Crash Cash";
+  }
+
   return (
 
     <main
-      className="bg-slate-950 min-h-screen text-white p-8"
+      className="
+        bg-slate-950
+        min-h-screen
+        text-white
+        p-8
+      "
     >
 
       <h1
-        className="text-5xl font-bold mb-10"
+        className="
+          text-5xl
+          font-bold
+          mb-10
+        "
       >
         Portfolio Allocator
       </h1>
 
-      {/* TOP CARDS */}
+      {/* DECISION CARDS */}
 
       <div
-        className="grid md:grid-cols-4 gap-4 mb-8"
+        className="
+          grid
+          md:grid-cols-4
+          gap-4
+          mb-8
+        "
       >
 
         <div
-          className="bg-slate-900 p-6 rounded-xl"
+          className="
+            bg-slate-900
+            p-6
+            rounded-xl
+          "
         >
 
           <p
-            className="text-gray-400"
+            className="
+              text-gray-400
+            "
           >
-            Market Regime
+            Market Outlook
           </p>
 
           <p
-            className="text-2xl font-bold mt-2"
+            className="
+              text-xl
+              font-bold
+              mt-2
+            "
           >
-            {data.marketRegime}
+            {marketOutlook}
           </p>
 
         </div>
 
         <div
-          className="bg-slate-900 p-6 rounded-xl"
+          className="
+            bg-slate-900
+            p-6
+            rounded-xl
+          "
         >
 
           <p
-            className="text-gray-400"
+            className="
+              text-gray-400
+            "
           >
-            Capital
+            Deployment Status
           </p>
 
           <p
-            className="text-2xl font-bold mt-2"
+            className="
+              text-2xl
+              font-bold
+              mt-2
+            "
           >
-            ₹{data.capital.toLocaleString()}
+            {deploymentPct}%
           </p>
 
         </div>
 
         <div
-          className="bg-slate-900 p-6 rounded-xl"
+          className="
+            bg-slate-900
+            p-6
+            rounded-xl
+          "
         >
 
           <p
-            className="text-gray-400"
+            className="
+              text-gray-400
+            "
           >
-            Invested Capital
+            Cash Ready For Dip
           </p>
 
           <p
-            className="text-2xl font-bold mt-2"
+            className="
+              text-2xl
+              font-bold
+              mt-2
+            "
           >
-            ₹{data.investedCapital.toLocaleString()}
+            ₹
+            {data.cashReserve.toLocaleString()}
           </p>
 
         </div>
 
         <div
-          className="bg-slate-900 p-6 rounded-xl"
+          className="
+            bg-slate-900
+            p-6
+            rounded-xl
+          "
         >
 
           <p
-            className="text-gray-400"
+            className="
+              text-gray-400
+            "
           >
-            Cash Reserve
+            Largest Position
           </p>
 
           <p
-            className="text-2xl font-bold mt-2"
+            className="
+              text-xl
+              font-bold
+              mt-2
+            "
           >
-            ₹{data.cashReserve.toLocaleString()}
+            {largestPosition.symbol}
+          </p>
+
+          <p
+            className="
+              text-green-400
+              mt-1
+            "
+          >
+            {largestPosition.allocationPct}%
           </p>
 
         </div>
 
       </div>
 
-      {/* ALLOCATIONS */}
+      {/* DEPLOYMENT BAR */}
 
       <div
-        className="bg-slate-900 rounded-xl p-6"
+        className="
+          bg-slate-900
+          rounded-xl
+          p-6
+          mb-8
+        "
+      >
+
+        <div
+          className="
+            flex
+            justify-between
+            mb-3
+          "
+        >
+
+          <span>
+            Capital Deployment
+          </span>
+
+          <span>
+            {deploymentPct}%
+          </span>
+
+        </div>
+
+        <div
+          className="
+            w-full
+            bg-slate-800
+            rounded-full
+            h-4
+          "
+        >
+
+          <div
+            className="
+              bg-green-500
+              h-4
+              rounded-full
+            "
+            style={{
+              width:
+                `${deploymentPct}%`
+            }}
+          />
+
+        </div>
+
+      </div>
+
+      {/* ALLOCATION TABLE */}
+
+      <div
+        className="
+          bg-slate-900
+          rounded-xl
+          p-6
+        "
       >
 
         <h2
-          className="text-2xl font-bold mb-4"
+          className="
+            text-2xl
+            font-bold
+            mb-4
+          "
         >
           Portfolio Allocations
         </h2>
@@ -168,29 +354,41 @@ export default function PortfolioPage() {
           <thead>
 
             <tr
-              className="border-b border-slate-700"
+              className="
+                border-b
+                border-slate-700
+              "
             >
 
               <th
-                className="text-left py-3"
+                className="
+                  text-left
+                  py-3
+                "
               >
                 ETF
               </th>
 
               <th
-                className="text-left"
+                className="
+                  text-left
+                "
               >
                 Score
               </th>
 
               <th
-                className="text-left"
+                className="
+                  text-left
+                "
               >
                 Allocation %
               </th>
 
               <th
-                className="text-left"
+                className="
+                  text-left
+                "
               >
                 Amount
               </th>
@@ -210,7 +408,10 @@ export default function PortfolioPage() {
                   key={
                     allocation.symbol
                   }
-                  className="border-b border-slate-800"
+                  className="
+                    border-b
+                    border-slate-800
+                  "
                 >
 
                   <td
