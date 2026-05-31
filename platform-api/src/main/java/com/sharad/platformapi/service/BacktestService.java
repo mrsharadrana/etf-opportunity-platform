@@ -7,6 +7,7 @@ import com.sharad.platformapi.repository.ETFPriceHistoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,6 +45,8 @@ public class BacktestService {
 
         long totalHoldingDays = 0;
 
+        List<Double> tradeReturns = new ArrayList<>();
+
         List<SignalHistoryDto> signals =
                 signalHistoryService.generateSignals();
 
@@ -57,6 +60,8 @@ public class BacktestService {
                     0,
                     0,
                     0,
+                    0.0,
+                    0.0,
                     0.0,
                     0.0,
                     0.0,
@@ -117,6 +122,10 @@ public class BacktestService {
 
                 double tradeReturnPct =
                         tradeReturn * 100.0;
+
+                tradeReturns.add(
+                        tradeReturnPct
+                );
 
                 totalTradeReturn += tradeReturnPct;
 
@@ -211,6 +220,10 @@ public class BacktestService {
                         ? (double) totalHoldingDays / trades
                         : 0.0;
 
+        double sharpeRatio = 0.0;
+
+        double sortinoRatio = 0.0;
+
         if (bestTradeReturn == Double.NEGATIVE_INFINITY) {
             bestTradeReturn = 0.0;
         }
@@ -232,7 +245,9 @@ public class BacktestService {
                 averageTradeReturn,
                 bestTradeReturn,
                 worstTradeReturn,
-                averageHoldingDays
+                averageHoldingDays,
+                sharpeRatio,
+                sortinoRatio
         );
     }
 }

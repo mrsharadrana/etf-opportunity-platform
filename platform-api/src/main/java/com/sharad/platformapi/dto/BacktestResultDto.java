@@ -26,7 +26,11 @@ public record BacktestResultDto(
 
         Double worstTradeReturnPct,
 
-        Double averageHoldingDays
+        Double averageHoldingDays,
+
+        Double sharpeRatio,
+
+        Double sortinoRatio
 
 ) {
 }
