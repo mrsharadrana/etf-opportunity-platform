@@ -220,9 +220,15 @@ public class BacktestService {
                         ? (double) totalHoldingDays / trades
                         : 0.0;
 
-        double sharpeRatio = 0.0;
+        double sharpeRatio =
+                calculateSharpeRatio(
+                        tradeReturns
+                );
 
-        double sortinoRatio = 0.0;
+        double sortinoRatio =
+                calculateSortinoRatio(
+                        tradeReturns
+                );
 
         if (bestTradeReturn == Double.NEGATIVE_INFINITY) {
             bestTradeReturn = 0.0;
@@ -249,5 +255,90 @@ public class BacktestService {
                 sharpeRatio,
                 sortinoRatio
         );
+    }
+
+    private double calculateSharpeRatio(
+            List<Double> returns
+    ) {
+
+        if (returns.size() < 2) {
+            return 0.0;
+        }
+
+        double mean =
+                returns.stream()
+                        .mapToDouble(Double::doubleValue)
+                        .average()
+                        .orElse(0.0);
+
+        double variance =
+                returns.stream()
+                        .mapToDouble(
+                                r -> Math.pow(
+                                        r - mean,
+                                        2
+                                )
+                        )
+                        .average()
+                        .orElse(0.0);
+
+        double stdDev =
+                Math.sqrt(
+                        variance
+                );
+
+        if (stdDev == 0.0) {
+            return 0.0;
+        }
+
+        return mean / stdDev;
+    }
+
+    private double calculateSortinoRatio(
+            List<Double> returns
+    ) {
+
+        if (returns.size() < 2) {
+            return 0.0;
+        }
+
+        double mean =
+                returns.stream()
+                        .mapToDouble(Double::doubleValue)
+                        .average()
+                        .orElse(0.0);
+
+        List<Double> downsideReturns =
+                returns.stream()
+                        .filter(
+                                r -> r < 0
+                        )
+                        .toList();
+
+        if (downsideReturns.isEmpty()) {
+            return 999.0;
+        }
+
+        double downsideVariance =
+                downsideReturns.stream()
+                        .mapToDouble(
+                                r -> Math.pow(
+                                        r,
+                                        2
+                                )
+                        )
+                        .average()
+                        .orElse(0.0);
+
+        double downsideDeviation =
+                Math.sqrt(
+                        downsideVariance
+                );
+
+        if (downsideDeviation == 0.0) {
+            return 0.0;
+        }
+
+        return mean / downsideDeviation;
     }
 }
