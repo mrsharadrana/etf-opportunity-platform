@@ -8,61 +8,52 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ETFPriceHistoryRepository
-        extends JpaRepository<ETFPriceHistory, Long> {
+                extends JpaRepository<ETFPriceHistory, Long> {
 
-    @Query("""
-            SELECT e
-            FROM ETFPriceHistory e
-            WHERE e.tradeDate = (
-                SELECT MAX(x.tradeDate)
-                FROM ETFPriceHistory x
-            )
-            ORDER BY e.rank ASC
-            """)
-    List<ETFPriceHistory> findLatestRankings();
+        @Query("""
+                        SELECT e
+                        FROM ETFPriceHistory e
+                        WHERE e.tradeDate = (
+                            SELECT MAX(x.tradeDate)
+                            FROM ETFPriceHistory x
+                        )
+                        ORDER BY e.rank ASC
+                        """)
+        List<ETFPriceHistory> findLatestRankings();
 
-    List<ETFPriceHistory>
-    findBySymbolOrderByTradeDateDesc(
-            String symbol
-    );
+        List<ETFPriceHistory> findBySymbolOrderByTradeDateDesc(
+                        String symbol);
 
-    List<ETFPriceHistory>
-    findByTradeDate(
-            LocalDate tradeDate
-    );
+        List<ETFPriceHistory> findByTradeDate(
+                        LocalDate tradeDate);
 
-    List<ETFPriceHistory>
-    findByTradeDateOrderByRankAsc(
-            LocalDate tradeDate
-    );
+        List<ETFPriceHistory> findByTradeDateOrderByRankAsc(
+                        LocalDate tradeDate);
 
-    ETFPriceHistory
-    findBySymbolAndTradeDate(
-            String symbol,
-            LocalDate tradeDate
-    );
+        ETFPriceHistory findBySymbolAndTradeDate(
+                        String symbol,
+                        LocalDate tradeDate);
 
-    boolean existsBySymbolAndTradeDate(
-            String symbol,
-            LocalDate tradeDate
-    );
+        boolean existsBySymbolAndTradeDate(
+                        String symbol,
+                        LocalDate tradeDate);
 
-    List<ETFPriceHistory>
-    findBySymbolOrderByTradeDateAsc(
-            String symbol
-    );
+        List<ETFPriceHistory> findBySymbolOrderByTradeDateAsc(
+                        String symbol);
 
-    List<ETFPriceHistory>
-    findTop30BySymbolOrderByTradeDateDesc(
-            String symbol
-    );
+        List<ETFPriceHistory> findTop30BySymbolOrderByTradeDateDesc(
+                        String symbol);
 
-    List<ETFPriceHistory>
-    findByTradeDateAndSymbolIn(
-            java.time.LocalDate tradeDate,
-            java.util.List<String> symbols
-    );
+        List<ETFPriceHistory> findByTradeDateAndSymbolIn(
+                        java.time.LocalDate tradeDate,
+                        java.util.List<String> symbols);
 
-    @org.springframework.data.jpa.repository.Query("SELECT MAX(e.tradeDate) FROM ETFPriceHistory e")
-    java.time.LocalDate findMaxTradeDate();
+        List<ETFPriceHistory> findTop20BySymbolOrderByTradeDateDesc(
+                        String symbol);
+
+        ETFPriceHistory findTopBySymbolOrderByTradeDateDesc(
+                        String symbol);
+
+        @org.springframework.data.jpa.repository.Query("SELECT MAX(e.tradeDate) FROM ETFPriceHistory e")
+        java.time.LocalDate findMaxTradeDate();
 }
