@@ -3,6 +3,8 @@ package com.sharad.platformapi.service;
 import com.sharad.platformapi.dto.ActionPlanDto;
 import com.sharad.platformapi.dto.CrashLayerDto;
 import com.sharad.platformapi.dto.LifecycleActionDto;
+import com.sharad.platformapi.dto.PortfolioAllocationDto;
+import com.sharad.platformapi.dto.PortfolioResponseDto;
 
 import org.springframework.stereotype.Service;
 
@@ -17,15 +19,21 @@ public class ActionPlanService {
 
     private final LifecycleService lifecycleService;
 
+    private final PortfolioAllocatorService portfolioAllocatorService;
+
     public ActionPlanService(
             CrashLayerService crashLayerService,
-            LifecycleService lifecycleService
+            LifecycleService lifecycleService,
+            PortfolioAllocatorService portfolioAllocatorService
     ) {
         this.crashLayerService =
                 crashLayerService;
 
         this.lifecycleService =
                 lifecycleService;
+
+        this.portfolioAllocatorService =
+                portfolioAllocatorService;
     }
 
     public ActionPlanDto generate(
@@ -44,6 +52,9 @@ public class ActionPlanService {
                 ).divide(
                         BigDecimal.valueOf(100)
                 );
+
+        PortfolioResponseDto portfolio =
+                portfolioAllocatorService.allocate();
 
         List<String> buy =
                 new ArrayList<>();
@@ -66,11 +77,40 @@ public class ActionPlanService {
                     action.action()
             ) {
 
-                case "BUY" ->
+                case "BUY" -> {
+
+                    PortfolioAllocationDto allocation =
+                            portfolio.allocations()
+                                    .stream()
+                                    .filter(
+                                            x ->
+                                                    x.symbol()
+                                                            .equals(
+                                                                    action.symbol()
+                                                            )
+                                    )
+                                    .findFirst()
+                                    .orElse(
+                                            null
+                                    );
+
+                    if (allocation != null) {
+
+                        buy.add(
+                                action.symbol()
+                                        + " ₹"
+                                        + allocation
+                                        .allocationAmount()
+                                        .intValue()
+                        );
+
+                    } else {
 
                         buy.add(
                                 action.symbol()
                         );
+                    }
+                }
 
                 case "REDUCE_20",
                      "REDUCE_40" ->
