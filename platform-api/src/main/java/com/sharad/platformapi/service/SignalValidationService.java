@@ -44,74 +44,97 @@ public class SignalValidationService {
 
         long totalHoldingDays = 0;
 
-        for (int i = 0; i < signals.size() - 1; i++) {
+        SignalHistoryDto entrySignal = null;
+
+        for (int i = 0; i < signals.size(); i++) {
 
             SignalHistoryDto current =
                     signals.get(i);
 
-            SignalHistoryDto next =
-                    signals.get(i + 1);
+            if (entrySignal == null) {
 
-            if (!symbol.equalsIgnoreCase(
-                    current.selectedEtf()
-            )) {
+                if (symbol.equalsIgnoreCase(
+                        current.selectedEtf()
+                )) {
+                    entrySignal = current;
+                }
+
+                continue;
+            }
+
+            boolean exitedPosition =
+                    !symbol.equalsIgnoreCase(
+                            current.selectedEtf()
+                    );
+
+            boolean lastSignal =
+                    i == signals.size() - 1;
+
+            if (!exitedPosition && !lastSignal) {
                 continue;
             }
 
             ETFPriceHistory entry =
                     repository.findBySymbolAndTradeDate(
                             symbol,
-                            current.tradeDate()
+                            entrySignal.tradeDate()
                     );
 
             ETFPriceHistory exit =
                     repository.findBySymbolAndTradeDate(
                             symbol,
-                            next.tradeDate()
+                            current.tradeDate()
                     );
 
-            if (entry == null || exit == null) {
-                continue;
+            if (entry != null && exit != null) {
+
+                double entryPrice =
+                        entry.getClosePrice()
+                                .doubleValue();
+
+                double exitPrice =
+                        exit.getClosePrice()
+                                .doubleValue();
+
+                double returnPct =
+                        ((exitPrice - entryPrice)
+                                / entryPrice)
+                                * 100.0;
+
+                signalCount++;
+
+                totalReturn += returnPct;
+
+                bestReturn =
+                        Math.max(
+                                bestReturn,
+                                returnPct
+                        );
+
+                worstReturn =
+                        Math.min(
+                                worstReturn,
+                                returnPct
+                        );
+
+                if (returnPct > 0) {
+                    wins++;
+                }
+
+                totalHoldingDays +=
+                        ChronoUnit.DAYS.between(
+                                entrySignal.tradeDate(),
+                                current.tradeDate()
+                        );
             }
 
-            double entryPrice =
-                    entry.getClosePrice()
-                            .doubleValue();
+            entrySignal = null;
 
-            double exitPrice =
-                    exit.getClosePrice()
-                            .doubleValue();
-
-            double returnPct =
-                    ((exitPrice - entryPrice)
-                            / entryPrice)
-                            * 100.0;
-
-            signalCount++;
-
-            totalReturn += returnPct;
-
-            bestReturn =
-                    Math.max(
-                            bestReturn,
-                            returnPct
-                    );
-
-            worstReturn =
-                    Math.min(
-                            worstReturn,
-                            returnPct
-                    );
-
-            if (returnPct > 0) {
-                wins++;
+            if (symbol.equalsIgnoreCase(
+                    current.selectedEtf()
+            )) {
+                entrySignal = current;
             }
-
-            totalHoldingDays +=
-                    ChronoUnit.DAYS.between(
-                            current.tradeDate(),
-                            next.tradeDate()
-                    );
         }
 
         if (signalCount == 0) {
