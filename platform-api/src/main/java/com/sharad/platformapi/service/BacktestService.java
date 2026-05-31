@@ -4,7 +4,6 @@ import com.sharad.platformapi.dto.BacktestResultDto;
 import com.sharad.platformapi.dto.SignalHistoryDto;
 import com.sharad.platformapi.entity.ETFPriceHistory;
 import com.sharad.platformapi.repository.ETFPriceHistoryRepository;
-
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
@@ -37,6 +36,14 @@ public class BacktestService {
         int wins = 0;
         int losses = 0;
 
+        double totalTradeReturn = 0.0;
+
+        double bestTradeReturn = Double.NEGATIVE_INFINITY;
+
+        double worstTradeReturn = Double.POSITIVE_INFINITY;
+
+        long totalHoldingDays = 0;
+
         List<SignalHistoryDto> signals =
                 signalHistoryService.generateSignals();
 
@@ -50,6 +57,10 @@ public class BacktestService {
                     0,
                     0,
                     0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
                     0.0,
                     0.0
             );
@@ -103,6 +114,31 @@ public class BacktestService {
                 double tradeReturn =
                         (exitPrice - entryPrice)
                                 / entryPrice;
+
+                double tradeReturnPct =
+                        tradeReturn * 100.0;
+
+                totalTradeReturn += tradeReturnPct;
+
+                bestTradeReturn =
+                        Math.max(
+                                bestTradeReturn,
+                                tradeReturnPct
+                        );
+
+                worstTradeReturn =
+                        Math.min(
+                                worstTradeReturn,
+                                tradeReturnPct
+                        );
+
+                long holdingDays =
+                        ChronoUnit.DAYS.between(
+                                positionStartSignal.tradeDate(),
+                                signal.tradeDate()
+                        );
+
+                totalHoldingDays += holdingDays;
 
                 capital =
                         capital * (1.0 + tradeReturn);
@@ -165,6 +201,24 @@ public class BacktestService {
                         * 100.0
                         : 0.0;
 
+        double averageTradeReturn =
+                trades > 0
+                        ? totalTradeReturn / trades
+                        : 0.0;
+
+        double averageHoldingDays =
+                trades > 0
+                        ? (double) totalHoldingDays / trades
+                        : 0.0;
+
+        if (bestTradeReturn == Double.NEGATIVE_INFINITY) {
+            bestTradeReturn = 0.0;
+        }
+
+        if (worstTradeReturn == Double.POSITIVE_INFINITY) {
+            worstTradeReturn = 0.0;
+        }
+
         return new BacktestResultDto(
                 initialCapital,
                 capital,
@@ -174,7 +228,11 @@ public class BacktestService {
                 wins,
                 losses,
                 winRate,
-                maxDrawdown
+                maxDrawdown,
+                averageTradeReturn,
+                bestTradeReturn,
+                worstTradeReturn,
+                averageHoldingDays
         );
     }
 }

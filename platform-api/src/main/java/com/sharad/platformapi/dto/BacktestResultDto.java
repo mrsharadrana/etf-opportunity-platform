@@ -18,7 +18,15 @@ public record BacktestResultDto(
 
         Double winRatePct,
 
-        Double maxDrawdownPct
+        Double maxDrawdownPct,
+
+        Double averageTradeReturnPct,
+
+        Double bestTradeReturnPct,
+
+        Double worstTradeReturnPct,
+
+        Double averageHoldingDays
 
 ) {
 }
